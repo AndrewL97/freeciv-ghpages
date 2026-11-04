@@ -40,8 +40,12 @@ cd "$BUILD"
 
 # Collect browser files
 mkdir -p "$OLDPWD/public"
-cp freeciv-sdl2.* "$OLDPWD/public/"
+# Build outputs freeciv-sdl2.html.p directory - I think we can ignore it - find to grab just the files
+find . -maxdepth 1 -type f -name 'freeciv-sdl2.*' \
+    -exec cp {} "$OLDPWD/public/" \;
 
 # GitHub Pages entry point
 cp "$OLDPWD/public/freeciv-sdl2.html" "$OLDPWD/public/index.html"
 touch "$OLDPWD/public/.nojekyll"
+
+
