@@ -32,7 +32,7 @@ jobs:
             cmake
 
       - name: Build
-        run: bash build.sh
+        run: bash scripts/build.sh
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
