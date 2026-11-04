@@ -21,6 +21,10 @@ cp -R "${DATA_SRC}/data/hexemplio" \
       "${DATA_TGT}/data/" || exit 1
 
 # Shared graphics resources referenced by Hexemplio
+
+cp "${DATA_SRC}/data/amplio2.tilespec" \
+   "${DATA_TGT}/data/" || exit 1
+   
 cp -R "${DATA_SRC}/data/amplio2" \
       "${DATA_TGT}/data/" || exit 1
 
