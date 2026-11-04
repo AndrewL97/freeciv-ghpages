@@ -6,12 +6,30 @@ WORK="$PWD/work"
 SRC="$WORK/freeciv"
 EMSDK="$WORK/emsdk"
 BUILD="$WORK/build"
+NATIVE="$WORK/native"
 
 rm -rf "$WORK" public
 mkdir -p "$WORK" "$BUILD"
 
 # Get Freeciv
 git clone --depth 1 https://github.com/freeciv/freeciv.git "$SRC"
+
+# Build native tolua (something about freeciv or something something)
+meson setup "$NATIVE" "$SRC" \
+    -Dclients=[] \
+    -Dserver=disabled \
+    -Dtools=[] \
+    -Dfcmp=[] \
+    -Dfcdb=[] \
+    -Daudio=none \
+    -Dnls=false \
+    -Dmwand=false \
+    -Dsyslua=false
+
+ninja -C "$NATIVE" tolua
+
+# Make native tolua available to the Emscripten build
+export PATH="$NATIVE:$PATH"
 
 # Install Emscripten SDK (version is defined by upstream script)
 "$SRC/platforms/emscripten/emssetup.sh" "$EMSDK"
