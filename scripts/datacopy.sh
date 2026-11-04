@@ -31,4 +31,7 @@ cp -R "${DATA_SRC}/data/amplio2" \
 cp -R "${DATA_SRC}/data/misc" \
       "${DATA_TGT}/data/" || exit 1
 
+cp -R "${DATA_SRC}/data/override" \
+"${DATA_TGT}/data/" || exit 1
+
 echo "data copied successfully."
