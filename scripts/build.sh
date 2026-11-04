@@ -2,6 +2,8 @@
 #!/usr/bin/env bash
 set -e
 
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
 WORK="$PWD/work"
 SRC="$WORK/freeciv"
 EMSDK="$WORK/emsdk"
@@ -13,6 +15,14 @@ mkdir -p "$WORK" "$BUILD"
 
 # Get Freeciv
 git clone --depth 1 https://github.com/freeciv/freeciv.git "$SRC"
+
+
+# Overwrite upstream datacopy.sh to include more stuff
+
+cp "$ROOT/scripts/datacopy.sh" \
+   "$SRC/platforms/emscripten/datacopy.sh"
+
+chmod +x "$SRC/platforms/emscripten/datacopy.sh"
 
 # Build native tolua (something about freeciv or something something)
 meson setup "$NATIVE" "$SRC" \
@@ -34,17 +44,9 @@ export PATH="$NATIVE:$PATH"
 # Install Emscripten SDK (version is defined by upstream script)
 "$SRC/platforms/emscripten/emssetup.sh" "$EMSDK"
 
-# Locate Emscripten minimal HTML shell
-SHELL_MINIMAL=$(find "$EMSDK" -name shell_minimal.html -print -quit)
-
-if [ -z "$SHELL_MINIMAL" ]; then
-    echo "Could not find shell_minimal.html"
-    exit 1
-fi
-
 # Build Freeciv
 cd "$BUILD"
-"$SRC/platforms/emscripten/emsbuild.sh" "$EMSDK" "$SHELL_MINIMAL"
+"$SRC/platforms/emscripten/emsbuild.sh" "$EMSDK"
 
 # Collect browser files
 mkdir -p "$OLDPWD/public"
@@ -59,7 +61,7 @@ curl -fsSL \
     -o "$OLDPWD/public/coi-serviceworker.min.js"
 
 # GitHub Pages entry point
-cp "$OLDPWD/public/freeciv-sdl2.html" "$OLDPWD/public/index.html"
+cp "$ROOT/index.html" "$OLDPWD/public/index.html"
 
 # Shove coi-serviceworker into index.html
 sed -i 's|</head>|<script src="./coi-serviceworker.min.js"></script>\n</head>|' \
