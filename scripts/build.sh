@@ -63,8 +63,4 @@ curl -fsSL \
 # GitHub Pages entry point
 cp "$ROOT/index.html" "$OLDPWD/public/index.html"
 
-# Shove coi-serviceworker into index.html
-sed -i 's|</head>|<script src="./coi-serviceworker.min.js"></script>\n</head>|' \
-    "$OLDPWD/public/index.html"
-
 touch "$OLDPWD/public/.nojekyll"
