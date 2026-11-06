@@ -87,7 +87,7 @@ ninja
 
 
 # Collect browser files
-mkdir -p "$OLDPWD/public"
+mkdir -p "$ROOT/public"
 
 # Build outputs freeciv-sdl2.html.p directory - I think we can ignore it - find to grab just the files
 find . -maxdepth 1 -type f \( \
@@ -95,14 +95,14 @@ find . -maxdepth 1 -type f \( \
     -name '*.html' -o \
     -name '*.wasm' -o \
     -name '*.data' \
-\) -exec cp {} "$OLDPWD/public/" \;
+\) -exec cp {} "$ROOT/public/" \;
 
 # Install coi-serviceworker - so pthreads works or something
 curl -fsSL \
     https://raw.githubusercontent.com/gzuidhof/coi-serviceworker/master/coi-serviceworker.min.js \
-    -o "$OLDPWD/public/coi-serviceworker.min.js"
+    -o "$ROOT/public/coi-serviceworker.min.js"
 
 # GitHub Pages entry point
-cp "$ROOT/index.html" "$OLDPWD/public/index.html"
+cp "$ROOT/index.html" "$ROOT/public/index.html"
 
-touch "$OLDPWD/public/.nojekyll"
+touch "$ROOT/public/.nojekyll"
