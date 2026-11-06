@@ -26,9 +26,12 @@ chmod +x "$SRC/platforms/emscripten/datacopy.sh"
 
 # Build native tolua (something about freeciv or something something)
 meson setup "$NATIVE" "$SRC" \
+    -Dclients=[] \
+    -Dserver=disabled \
     -Dtools=[] \
     -Dfcmp=[] \
     -Dfcdb=[] \
+    -Daudio=none \
     -Dnls=false \
     -Dmwand=false \
     -Dsyslua=false
