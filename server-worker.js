@@ -1,5 +1,5 @@
 self.Module = {
-    arguments: ["--help"],
+    arguments: [],
 
     print: (...args) => console.log("[server]", ...args),
     printErr: (...args) => console.error("[server]", ...args),
