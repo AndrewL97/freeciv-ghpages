@@ -94,7 +94,7 @@ find . -maxdepth 1 -type f \( \
     -name '*.js' -o \
     -name '*.html' -o \
     -name '*.wasm' -o \
-    -name '*.data' -o \
+    -name '*.data' \
 \) -exec cp {} "$OLDPWD/public/" \;
 
 # Install coi-serviceworker - so pthreads works or something
