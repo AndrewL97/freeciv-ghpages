@@ -1,6 +1,6 @@
-
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +13,8 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       width: 100%;
       height: 100%;
@@ -36,13 +37,26 @@
   <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="0"></canvas>
 
   <script>
+
+    // Start Freeciv server worker
+    const serverWorker = new Worker("./server-worker.js");
+
+    serverWorker.onmessage = (event) => {
+      console.log("[server worker]", event.data);
+    };
+
+    serverWorker.onerror = (event) => {
+      console.error("[server worker error]", event);
+    };
+
+    // Start Freeciv client
     const canvas = document.getElementById("canvas");
 
     var Module = {
       canvas: canvas,
 
       arguments: ["--tiles", "hexemplio"],
-      
+
       print: (...args) => console.log(...args),
       printErr: (...args) => console.error(...args),
 
@@ -58,4 +72,5 @@
 
   <script src="./freeciv-sdl2.js"></script>
 </body>
+
 </html>
