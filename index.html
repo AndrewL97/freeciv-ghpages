@@ -1,0 +1,61 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Freeciv</title>
+
+  <script src="./coi-serviceworker.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #222;
+    }
+
+    #canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      border: 0;
+      outline: none;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="0"></canvas>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+
+    var Module = {
+      canvas: canvas,
+
+      arguments: ["--tiles", "hexemplio"],
+      
+      print: (...args) => console.log(...args),
+      printErr: (...args) => console.error(...args),
+
+      onRuntimeInitialized: () => {
+        console.log("Freeciv initialized");
+      },
+
+      onAbort: (reason) => {
+        console.error("Freeciv aborted:", reason);
+      }
+    };
+  </script>
+
+  <script src="./freeciv-sdl2.js"></script>
+</body>
+</html>
