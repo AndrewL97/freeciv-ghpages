@@ -26,12 +26,9 @@ chmod +x "$SRC/platforms/emscripten/datacopy.sh"
 
 # Build native tolua (something about freeciv or something something)
 meson setup "$NATIVE" "$SRC" \
-    -Dclients=[] \
-    -Dserver=disabled \
     -Dtools=[] \
     -Dfcmp=[] \
     -Dfcdb=[] \
-    -Daudio=none \
     -Dnls=false \
     -Dmwand=false \
     -Dsyslua=false
@@ -41,12 +38,50 @@ ninja -C "$NATIVE" tolua
 # Make native tolua available to the Emscripten build
 export PATH="$NATIVE:$PATH"
 
-# Install Emscripten SDK (version is defined by upstream script)
+# Build Freeciv
+############### -- yoinked from em
+
+# Install Emscripten SDK
 "$SRC/platforms/emscripten/emssetup.sh" "$EMSDK"
 
-# Build Freeciv
+# Load Emscripten environment
+EMSDK_ROOT="$(cd "$EMSDK" && pwd)"
+cd "$EMSDK_ROOT"
+source ./emsdk_env.sh
+
+# Configure build paths
+PLATFORM_ROOT="$SRC/platforms/emscripten"
+
 cd "$BUILD"
-"$SRC/platforms/emscripten/emsbuild.sh" "$EMSDK"
+
+# Generate Emscripten cross-file
+sed "s,<EMSDK_ROOT>,${EMSDK_ROOT},g" \
+    "$PLATFORM_ROOT/setups/cross-ems.tmpl" > cross.txt
+
+# Build SDL dependencies
+embuilder build sdl2 sdl2_image sdl2_ttf
+
+# Configure Freeciv
+meson setup \
+    --cross-file=cross.txt \
+    -Ddefault_library=static \
+    -Ddebug=true \
+    -Daudio=none \
+    -Dmwand=false \
+    -Dtools=[] \
+    -Dclients=sdl2 \
+    -Dserver=enabled \
+    -Ddynaimod=false \
+    -Daimodules=classic \
+    -Dfcmp=[] \
+    -Dfcdb=[] \
+    "$SRC"
+
+# Build
+ninja
+
+##############
+
 
 # Collect browser files
 mkdir -p "$OLDPWD/public"
