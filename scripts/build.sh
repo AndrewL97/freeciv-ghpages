@@ -90,8 +90,12 @@ ninja
 mkdir -p "$OLDPWD/public"
 
 # Build outputs freeciv-sdl2.html.p directory - I think we can ignore it - find to grab just the files
-find . -maxdepth 1 -type f -name 'freeciv-sdl2.*' \
-    -exec cp {} "$OLDPWD/public/" \;
+find . -maxdepth 1 -type f \( \
+    -name '*.js' -o \
+    -name '*.html' -o \
+    -name '*.wasm' -o \
+    -name '*.data' -o \
+\) -exec cp {} "$OLDPWD/public/" \;
 
 # Install coi-serviceworker - so pthreads works or something
 curl -fsSL \
